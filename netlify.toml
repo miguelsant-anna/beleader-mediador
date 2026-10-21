@@ -1,0 +1,4 @@
+# O projeto fica na subpasta be-leader-mediacao. A Netlify passa a construir a partir dela
+# e usa o netlify.toml que está lá (comando de build, pasta dist, funções e redirecionamentos).
+[build]
+  base = "be-leader-mediacao"

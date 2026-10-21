@@ -1,5 +1,6 @@
 [build]
-  command = "npm run build"
+  # Instala as dependências (inclusive as de desenvolvimento, como tsc e vite) antes do build.
+  command = "npm ci --include=dev && npm run build"
   publish = "dist"
   functions = "netlify/functions"
 
