@@ -5,12 +5,12 @@
 import { supabase, supabaseConfigurado } from "./supabase";
 import { ErroApi, gerarCodigo, paraLinha } from "./utils";
 import type { Avaliacoes, Candidatura, FormData, Status } from "../types";
-
+ 
 export type Modo = "compartilhado" | "demonstracao" | "nao-configurado";
 export const modo: Modo = supabaseConfigurado ? "compartilhado" : import.meta.env.DEV ? "demonstracao" : "nao-configurado";
-
+ 
 const demo = () => import("./demo").then((m) => m.demo);
-
+ 
 /* ---------- área pública ---------- */
 export async function emailJaCadastrado(email: string): Promise<boolean> {
   if (import.meta.env.DEV && modo === "demonstracao") return (await demo()).emailJaCadastrado(email);
@@ -19,7 +19,7 @@ export async function emailJaCadastrado(email: string): Promise<boolean> {
   if (error) return false; // a verificação nunca impede o envio
   return data === true;
 }
-
+ 
 export async function enviarCandidatura(d: FormData): Promise<string> {
   for (let tentativa = 0; tentativa < 3; tentativa++) {
     const codigo = gerarCodigo();
@@ -32,10 +32,10 @@ export async function enviarCandidatura(d: FormData): Promise<string> {
   }
   throw new ErroApi("Não foi possível gerar o código da candidatura.");
 }
-
+ 
 /* ---------- área do Comitê ---------- */
 type Resposta = { ok?: boolean; candidaturas?: Candidatura[]; erro?: string };
-
+ 
 async function chamar(acao: string, pin: string, extra: Record<string, unknown> = {}): Promise<Resposta> {
   if (import.meta.env.DEV && modo === "demonstracao") return (await demo()).comite(acao, pin, extra);
   let r: Response;
@@ -49,11 +49,11 @@ async function chamar(acao: string, pin: string, extra: Record<string, unknown> 
     throw new ErroApi("Sem conexão com o servidor. Tente novamente.");
   }
   const j = (await r.json().catch(() => ({}))) as Resposta;
-  if (!r.ok) throw new ErroApi(j.erro || "Não foi possível concluir a operação.", r.status);
+  if (!r.ok) throw new ErroApi(j.erro || `Não foi possível concluir a operação (erro ${r.status} no servidor).`, r.status);
   return j;
 }
 const lista = (r: Resposta) => r.candidaturas ?? [];
-
+ 
 export const comite = {
   entrar: (pin: string) => chamar("entrar", pin).then(() => undefined),
   listar: (pin: string) => chamar("listar", pin).then(lista),
