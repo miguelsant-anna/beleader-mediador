@@ -4,14 +4,15 @@ export default {
   theme: {
     extend: {
       colors: {
-        bg: "#F6F5FB",
+        bg: "#F7F4FB",
         ink: "#1B1E33",
         navy: "#15204A",
         navy2: "#26336E",
-        roxo: "#5B3FD0",
-        roxoSoft: "#EFEBFC",
-        magenta: "#D1307F",
-        magentaSoft: "#FDEBF3",
+        roxo: "#9933CC",
+        roxoSoft: "#F4EAFA",
+        magenta: "#D91A7A",
+        magentaSoft: "#FFEAF4",
+        rosa: "#FF3399",
         muted: "#5D6079",
         line: "#E3E1EE",
       },

@@ -7,7 +7,7 @@ Marque cada item:
 ## A. Candidatura anônima
 
 1. [ ] Abra o site em uma **janela anônima** (Chrome: Ctrl+Shift+N). Ele abre sem pedir login, conta ou PIN.
-2. [ ] Clique em **Conhecer a tarefa**. A página rola até "A tarefa" e mostra os 3 convidados, os 4 temas e a observação "Os quatro temas integram uma única conversa…".
+2. [ ] Clique em **Conhecer a tarefa**. A página rola até "A tarefa" e mostra os 4 convidados, os 4 temas e a observação "Os quatro temas integram uma única conversa…".
 3. [ ] Clique em **Quero me candidatar** e depois em **Avançar** sem preencher nada. Os campos obrigatórios ficam destacados com mensagem.
 4. [ ] Digite um e-mail inválido (ex.: `maria@`) e um WhatsApp curto. As mensagens de correção aparecem.
 5. [ ] Preencha a etapa 1 com dados de teste. Use um e-mail novo, ex.: `teste1@exemplo.invalid`.

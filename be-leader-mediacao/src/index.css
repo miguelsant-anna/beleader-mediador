@@ -2,12 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Identidade: cartões claros sobre fundo levemente lilás; marinho estrutura, roxo conduz, magenta pontua. */
+/* Identidade: cartões claros sobre fundo levemente lilás; marinho estrutura, roxo e rosa da marca Be Leader conduzem. */
 :root { color-scheme: light; }
 html { scroll-behavior: smooth; }
 body {
   margin: 0;
-  background: #F6F5FB;
+  background: #F7F4FB;
   color: #1B1E33;
   font-family: "Figtree", "Segoe UI", system-ui, sans-serif;
   font-size: 16px;
@@ -23,7 +23,7 @@ h1, h2, h3 { text-wrap: balance; }
   padding-right: max(16px, env(safe-area-inset-right, 0px));
 }
 .tnum { font-variant-numeric: tabular-nums; }
-:focus-visible { outline: 3px solid rgba(91, 63, 208, .45); outline-offset: 2px; }
+:focus-visible { outline: 3px solid rgba(153, 51, 204, .45); outline-offset: 2px; }
 .fade { animation: fadeUp .35s ease both; }
 @keyframes fadeUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 .drawer { animation: slideIn .28s ease both; }

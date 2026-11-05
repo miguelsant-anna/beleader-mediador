@@ -1,5 +1,5 @@
 import {
-  BookOpen, CalendarCheck, Cpu, Layers, ListChecks, Megaphone, Mic, PenLine, Presentation, Repeat, Timer, Users,
+  BookOpen, Cpu, Layers, ListChecks, Megaphone, Mic, PenLine, Presentation, Repeat, Timer, Users,
   type LucideIcon,
 } from "lucide-react";
 import { CONFIG } from "./config";
@@ -15,7 +15,6 @@ export const TEMAS: { titulo: string; icon: LucideIcon }[] = [
 
 export const PAPEL: [LucideIcon, string][] = [
   [BookOpen, "Estudar o briefing e o perfil dos convidados"],
-  [CalendarCheck, "Participar de uma reunião preparatória"],
   [PenLine, "Colaborar com a construção das perguntas"],
   [Presentation, "Apresentar o contexto e os convidados"],
   [Layers, "Conduzir toda a conversa, passando pelos quatro temas"],

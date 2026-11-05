@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { candidaturasEncerradas } from "./config";
 import { EMPTY } from "./data";
 import { enviarCandidatura } from "./lib/api";
 import { gerarCodigo, store } from "./lib/utils";
@@ -8,6 +9,7 @@ import { Formulario } from "./pages/Formulario";
 import { Revisao } from "./pages/Revisao";
 import { Confirmacao } from "./pages/Confirmacao";
 import { Painel } from "./pages/Painel";
+import { Encerrado } from "./pages/Encerrado";
 
 type View = "home" | "form" | "review" | "done" | "admin";
 const DRAFT = "bl-med-rascunho-v2";
@@ -53,9 +55,11 @@ export default function App() {
     store.del(DRAFT); setD(EMPTY); setStep(0); setTemRascunho(false); setCodigo(cod); setView("done");
   }
 
+  const encerrado = candidaturasEncerradas();
+  if (encerrado && (view === "form" || view === "review")) return <Encerrado onHome={() => setView("home")} />;
   if (view === "form") return <Formulario step={step} setStep={setStep} d={d} set={set} onHome={() => setView("home")} onReview={() => setView("review")} />;
   if (view === "review") return <Revisao d={d} onBack={() => setView("form")} onEdit={(s) => { setStep(s); setView("form"); }} onSend={enviar} />;
   if (view === "done") return <Confirmacao codigo={codigo} onHome={() => setView("home")} />;
   if (view === "admin") return <Painel onHome={() => setView("home")} />;
-  return <Home temRascunho={temRascunho} onStart={() => setView("form")} onAdmin={() => setView("admin")} />;
+  return <Home temRascunho={temRascunho} encerrado={encerrado} onStart={() => setView("form")} onAdmin={() => setView("admin")} />;
 }

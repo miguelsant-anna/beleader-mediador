@@ -101,7 +101,11 @@ npm run dev        # http://localhost:5173
 
 ## 5. Editar informações do Encontro
 
-Abra `src/config.ts` e altere data, horário, prazo, local, convidados e edições. Faça o commit no GitHub e a Netlify publica sozinha em cerca de 1 minuto.
+Abra `src/config.ts` e altere data, horário, local, endereço, link do mapa, prazo (`prazo` é o texto exibido e `prazoISO` é o momento exato em que o formulário fecha), data de anúncio, convidados, edições e contato.
+
+O logo fica em `public/be-leader-logo.svg`; a imagem da prévia do WhatsApp, em `public/og-image.png` (1200 × 630).
+
+Opcional: rode `supabase/prazo.sql` no SQL Editor para o banco também recusar envios depois do prazo. Faça o commit no GitHub e a Netlify publica sozinha em cerca de 1 minuto.
 
 ## 6. Ajustes desta versão
 

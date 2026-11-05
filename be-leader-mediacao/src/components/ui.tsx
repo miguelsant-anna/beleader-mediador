@@ -1,6 +1,7 @@
 import { useEffect, type InputHTMLAttributes, type ReactNode } from "react";
 import { createPortal } from "react-dom";
-import { Check, CircleAlert, CircleCheck, ShieldCheck } from "lucide-react";
+import { Check, CircleAlert, CircleCheck, Mail, MessageCircle, ShieldCheck } from "lucide-react";
+import { CONFIG } from "../config";
 import { PRIVACIDADE, STATUS_COR } from "../data";
 import type { Status } from "../types";
 
@@ -76,14 +77,22 @@ export function Selo({ children, tom = "slate" }: { children: ReactNode; tom?: "
   return <span className={"rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide " + cls}>{children}</span>;
 }
 
-export function Logo() {
+export function Logo({ className = "h-12 sm:h-16" }: { className?: string }) {
+  return <img src="/be-leader-logo.svg" alt="Be Leader · ES em Ação" width={570} height={258} className={"w-auto " + className} />;
+}
+
+/** Contato da equipe Be Leader (definido no CONFIG). */
+export function Contato({ className = "", titulo = "Dúvidas? Fale com a equipe Be Leader" }: { className?: string; titulo?: string }) {
+  const c = CONFIG.contato;
+  const link = "inline-flex items-center gap-1.5 font-semibold text-roxo underline-offset-4 hover:underline";
   return (
-    <div className="flex items-center gap-3">
-      <span className="grid h-10 w-10 place-items-center rounded-xl bg-navy font-display text-[15px] font-bold text-white">BL<span className="text-magenta">.</span></span>
-      <span className="leading-tight">
-        <span className="block font-display text-[15px] font-semibold text-navy">Comunidade Be Leader</span>
-        <span className="block text-xs text-muted">Espírito Santo em Ação</span>
-      </span>
+    <div className={"flex flex-col gap-1.5 text-sm text-muted " + className}>
+      <p className="font-semibold text-navy">{titulo}</p>
+      <p>{c.nome}</p>
+      <div className="flex flex-wrap gap-x-5 gap-y-1.5">
+        <a className={link} href={c.whatsappLink} target="_blank" rel="noopener noreferrer"><MessageCircle size={15} />WhatsApp {c.whatsapp}</a>
+        <a className={link + " break-all"} href={`mailto:${c.email}`}><Mail size={15} />{c.email}</a>
+      </div>
     </div>
   );
 }

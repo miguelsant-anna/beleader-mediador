@@ -1,12 +1,13 @@
-import { ArrowRight, CalendarDays, Check, Clock, Hourglass, Lock, MapPin, Mic, Quote, Sparkles, Timer, UserRound } from "lucide-react";
+import { ArrowRight, CalendarDays, Check, Clock, ExternalLink, Flag, Hourglass, Lock, MapPin, Mic, Quote, Sparkles, Timer, UserRound } from "lucide-react";
 import { CONFIG } from "../config";
 import { CRITERIOS_HOME, PAPEL, TEMAS } from "../data";
-import { btnPrim, btnSec, card, Logo, Privacidade } from "../components/ui";
+import { btnPrim, btnSec, card, Contato, Logo, Privacidade } from "../components/ui";
 
-export function Home({ onStart, temRascunho, onAdmin }: { onStart: () => void; temRascunho: boolean; onAdmin: () => void }) {
+export function Home({ onStart, temRascunho, onAdmin, encerrado }: { onStart: () => void; temRascunho: boolean; onAdmin: () => void; encerrado: boolean }) {
   const info = [
-    [MapPin, "Local", CONFIG.local], [CalendarDays, "Data", CONFIG.data], [Clock, "Horário", CONFIG.horario],
-    [Hourglass, "Candidaturas até", CONFIG.prazo], [Timer, "Preenchimento", `cerca de ${CONFIG.tempoPreenchimento}`],
+    [CalendarDays, "Data", `${CONFIG.data} (${CONFIG.diaSemana})`], [Clock, "Horário", CONFIG.horario],
+    [Hourglass, "Candidaturas até", CONFIG.prazo], [Flag, "Anúncio da pessoa escolhida", CONFIG.anuncio],
+    [Timer, "Preenchimento", `cerca de ${CONFIG.tempoPreenchimento}`],
   ] as const;
   const cta = temRascunho ? "Continuar minha candidatura" : "Quero me candidatar";
   return (
@@ -24,15 +25,22 @@ export function Home({ onStart, temRascunho, onAdmin }: { onStart: () => void; t
             <Mic size={14} /> Mediação · Encontro da Comunidade
           </span>
           <h1 className="font-display text-[2.6rem] font-bold leading-[1.02] tracking-tight text-navy sm:text-6xl lg:text-[4.2rem]">
-            Você pode <span className="relative whitespace-nowrap text-roxo">conduzir<span className="absolute -bottom-1 left-0 h-1.5 w-full rounded-full bg-magenta/80" /></span> essa conversa.
+            Você pode <span className="relative whitespace-nowrap text-roxo">conduzir<span className="absolute -bottom-1 left-0 h-1.5 w-full rounded-full bg-gradient-to-r from-roxo to-rosa" /></span> essa conversa.
           </h1>
           <p className="max-w-[34rem] text-lg leading-relaxed text-muted">
             A Comunidade Be Leader procura uma de suas lideranças para mediar o bate-papo do próximo Encontro, na Rede Gazeta.
           </p>
-          <div className="flex flex-wrap gap-3">
-            <button className={btnPrim} onClick={onStart}>{cta}<ArrowRight size={18} /></button>
-            <button className={btnSec} onClick={() => document.getElementById("tarefa")?.scrollIntoView()}>Conhecer a tarefa</button>
-          </div>
+          {encerrado ? (
+            <div className="max-w-[34rem] rounded-2xl border border-line bg-white p-5">
+              <p className="font-semibold text-navy">As candidaturas foram encerradas em {CONFIG.prazo}.</p>
+              <p className="mt-1 text-muted">A pessoa escolhida para a tarefa será anunciada em {CONFIG.anuncio}. Obrigado a todas as pessoas que se colocaram à disposição.</p>
+            </div>
+          ) : (
+            <div className="flex flex-wrap gap-3">
+              <button className={btnPrim} onClick={onStart}>{cta}<ArrowRight size={18} /></button>
+              <button className={btnSec} onClick={() => document.getElementById("tarefa")?.scrollIntoView()}>Conhecer a tarefa</button>
+            </div>
+          )}
           <p className="flex items-center gap-2 text-sm text-muted sm:hidden"><Lock size={14} className="text-magenta" />Exclusivo para integrantes da Comunidade</p>
         </div>
 
@@ -41,9 +49,18 @@ export function Home({ onStart, temRascunho, onAdmin }: { onStart: () => void; t
           <h2 className="mt-2 font-display text-2xl font-semibold leading-tight text-navy">Passado, presente e futuro da comunicação</h2>
           <p className="mt-2 leading-relaxed text-muted">Transformações e aprendizados de liderança a partir da trajetória da Rede Gazeta</p>
           <dl className="mt-6 grid gap-3 border-t border-line pt-5">
+            <div className="flex items-start gap-3">
+              <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-bg text-roxo"><MapPin size={17} /></span>
+              <div className="min-w-0">
+                <dt className="text-xs text-muted">Local</dt>
+                <dd className="font-semibold text-navy">{CONFIG.local}</dd>
+                <dd className="text-sm text-muted">{CONFIG.endereco}</dd>
+                <dd><a href={CONFIG.mapa} target="_blank" rel="noopener noreferrer" className="mt-1 inline-flex items-center gap-1 text-sm font-semibold text-roxo underline-offset-4 hover:underline">Ver no mapa<ExternalLink size={13} /></a></dd>
+              </div>
+            </div>
             {info.map(([Ic, k, v]) => (
               <div key={k} className="flex items-center gap-3">
-                <span className="grid h-9 w-9 place-items-center rounded-lg bg-bg text-roxo"><Ic size={17} /></span>
+                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-bg text-roxo"><Ic size={17} /></span>
                 <div className="min-w-0"><dt className="text-xs text-muted">{k}</dt><dd className="font-semibold text-navy">{v}</dd></div>
               </div>
             ))}
@@ -56,10 +73,10 @@ export function Home({ onStart, temRascunho, onAdmin }: { onStart: () => void; t
           <div className="flex min-w-0 flex-col gap-4">
             <h2 className="font-display text-3xl font-semibold text-navy">Quem estará na conversa</h2>
             <div className="grid gap-3">
-              {CONFIG.convidados.map((c, i) => (
-                <div key={i} className="flex items-center gap-4 rounded-2xl border border-line p-4">
-                  <span className="grid h-12 w-12 place-items-center rounded-full bg-roxoSoft text-roxo"><UserRound size={22} /></span>
-                  <div><p className="font-semibold text-navy">{c.nome}</p><p className="text-sm text-muted">{c.cargo}</p></div>
+              {CONFIG.convidados.map((c) => (
+                <div key={c.nome} className="flex items-center gap-4 rounded-2xl border border-line p-4">
+                  <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-roxoSoft text-roxo"><UserRound size={22} /></span>
+                  <div className="min-w-0"><p className="font-semibold text-navy">{c.nome}</p><p className="text-sm text-muted">{c.cargo}</p></div>
                 </div>
               ))}
             </div>
@@ -102,24 +119,29 @@ export function Home({ onStart, temRascunho, onAdmin }: { onStart: () => void; t
       <section className="wrap pb-16">
         <div className="grid gap-8 rounded-3xl bg-navy p-7 text-white sm:p-10 lg:grid-cols-[1.2fr_.8fr] lg:items-center">
           <div className="flex min-w-0 flex-col gap-5">
-            <Quote size={30} className="text-magenta" />
+            <Quote size={30} className="text-rosa" />
             <p className="font-display text-2xl font-medium leading-snug sm:text-[1.75rem]">Não buscamos alguém que tenha todas as respostas. Buscamos uma pessoa capaz de fazer boas perguntas, ouvir com atenção e ajudar a conversa a avançar.</p>
-            <button className="inline-flex w-fit items-center gap-2 rounded-full bg-white px-6 py-3.5 font-semibold text-navy transition hover:bg-roxoSoft" onClick={onStart}>
-              {cta}<ArrowRight size={18} />
-            </button>
+            {!encerrado && (
+              <button className="inline-flex w-fit items-center gap-2 rounded-full bg-white px-6 py-3.5 font-semibold text-navy transition hover:bg-roxoSoft" onClick={onStart}>
+                {cta}<ArrowRight size={18} />
+              </button>
+            )}
           </div>
           <div className="min-w-0 rounded-2xl bg-white/[.07] p-6">
             <p className="text-sm font-semibold text-white/80">O Comitê de Formação de Lideranças buscará o perfil mais aderente à tarefa considerando:</p>
             <ul className="mt-4 grid gap-2.5">
-              {CRITERIOS_HOME.map((c) => <li key={c} className="flex items-center gap-2.5"><Check size={16} className="shrink-0 text-magenta" strokeWidth={3} />{c}</li>)}
+              {CRITERIOS_HOME.map((c) => <li key={c} className="flex items-center gap-2.5"><Check size={16} className="shrink-0 text-rosa" strokeWidth={3} />{c}</li>)}
             </ul>
           </div>
         </div>
       </section>
 
       <footer className="border-t border-line/70 bg-white">
-        <div className="wrap flex flex-col gap-5 py-8 sm:flex-row sm:items-end sm:justify-between">
+        <div className="wrap grid gap-8 py-8 md:grid-cols-[1.3fr_1fr] md:items-start">
           <Privacidade className="max-w-2xl" />
+          <Contato />
+        </div>
+        <div className="wrap flex justify-end pb-6">
           <button onClick={onAdmin} className="inline-flex w-fit items-center gap-1.5 text-xs text-muted/80 hover:text-roxo"><Lock size={12} />Área do Comitê</button>
         </div>
       </footer>

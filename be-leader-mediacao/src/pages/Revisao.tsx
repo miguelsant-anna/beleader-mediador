@@ -1,9 +1,10 @@
 import { useRef, useState } from "react";
 import { ArrowLeft, CircleAlert, Info, Send } from "lucide-react";
+import { candidaturasEncerradas, CONFIG } from "../config";
 import { emailJaCadastrado, modo } from "../lib/api";
 import type { FormData } from "../types";
 import { Respostas } from "../components/Respostas";
-import { btnPrim, btnSec, Dialogo, Privacidade } from "../components/ui";
+import { btnPrim, btnSec, Contato, Dialogo, Privacidade } from "../components/ui";
 
 export function Revisao({ d, onEdit, onBack, onSend }: { d: FormData; onEdit: (s: number) => void; onBack: () => void; onSend: (spam: boolean) => Promise<void> }) {
   const [enviando, setEnviando] = useState(false);
@@ -18,6 +19,7 @@ export function Revisao({ d, onEdit, onBack, onSend }: { d: FormData; onEdit: (s
   }
   async function enviar() {
     if (travado.current) return;
+    if (candidaturasEncerradas()) { setFalha(`O prazo de candidaturas terminou em ${CONFIG.prazo}. Se precisar, fale com a equipe Be Leader pelo contato no rodapé da página inicial.`); return; }
     travado.current = true; setEnviando(true); setFalha("");
     if (await emailJaCadastrado(d.email)) { setDuplicado(true); setEnviando(false); travado.current = false; return; }
     await concluir();
@@ -62,6 +64,7 @@ export function Revisao({ d, onEdit, onBack, onSend }: { d: FormData; onEdit: (s
           <button className={btnPrim} autoFocus onClick={revisarEmail}>Revisar meu e-mail</button>
         </>}>
           Já encontramos uma candidatura associada a este e-mail. Se você deseja corrigir ou atualizar alguma informação, entre em contato com a equipe Be Leader.
+          <Contato className="mt-4" titulo="Contato da equipe Be Leader" />
         </Dialogo>
       )}
     </div>
