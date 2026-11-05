@@ -1,15 +1,27 @@
-   name: Manter Supabase ativo
-   on:
-     schedule:
-       - cron: "0 12 */3 * *"   # a cada 3 dias, por volta das 9h (Brasília)
-     workflow_dispatch:          # permite rodar manualmente
-   jobs:
-     ping:
-       runs-on: ubuntu-latest
-       steps:
-         - name: Consulta leve ao Supabase
-           run: |
-             curl -sS -f -X POST "${{ secrets.SUPABASE_URL }}/rest/v1/rpc/email_ja_cadastrado" \
-               -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
-               -H "Content-Type: application/json" \
-               -d '{"p_email":"verificacao@exemplo.invalid"}'
+name: Manter Supabase ativo
+on:
+  schedule:
+    - cron: "0 12 */3 * *"   # a cada 3 dias, por volta das 9h (Brasília)
+  workflow_dispatch:          # permite rodar manualmente
+jobs:
+  ping:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Consulta leve ao Supabase
+        env:
+          URL: ${{ secrets.SUPABASE_URL }}
+          KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          URL="${URL%/}"
+          if [ -z "$URL" ] || [ -z "$KEY" ]; then
+            echo "Segredo SUPABASE_URL ou SUPABASE_ANON_KEY não encontrado. Confira os nomes em Settings > Secrets and variables > Actions."
+            exit 1
+          fi
+          AUTH=()
+          case "$KEY" in eyJ*) AUTH=(-H "Authorization: Bearer $KEY");; esac
+          STATUS=$(curl -sS -o resposta.txt -w "%{http_code}" -X POST "$URL/rest/v1/rpc/email_ja_cadastrado" \
+            -H "apikey: $KEY" "${AUTH[@]}" -H "Content-Type: application/json" \
+            -d '{"p_email":"verificacao@exemplo.invalid"}')
+          echo "Resposta do Supabase (HTTP $STATUS):"
+          cat resposta.txt; echo
+          [ "$STATUS" = "200" ]
